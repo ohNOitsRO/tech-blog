@@ -18,6 +18,10 @@ Comment.init(
     description: {
       type: DataTypes.STRING,
     },
+    date_created: {
+      type:DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
     user_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -31,7 +35,7 @@ Comment.init(
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: 'project',
+    modelName: 'comment',
   }
 );
 
