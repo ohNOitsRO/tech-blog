@@ -4,15 +4,11 @@ const sequelize = require('../../config/connection');
 const withAuth = require('../../utils/auth');
 
 router.get('/', (req, res) => {
-    console.log('======================');
     Post.findAll({
-            attributes: ['id',
+            attributes: [
+                'id',
                 'title',
-                'content',
-                'created_at'
-            ],
-            order: [
-                ['created_at', 'DESC']
+                'content'
             ],
             include: [{
                     model: User,
@@ -20,7 +16,7 @@ router.get('/', (req, res) => {
                 },
                 {
                     model: Comment,
-                    attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                    attributes: ['id', 'comment_text', 'post_id', 'user_id', 'date_created'],
                     include: {
                         model: User,
                         attributes: ['username']
@@ -28,9 +24,8 @@ router.get('/', (req, res) => {
                 }
             ]
         })
-        .then(dbPostData => res.json(dbPostData.reverse()))
+        .then(postData => res.json(postData))
         .catch(err => {
-            console.log(err);
             res.status(500).json(err);
         });
 
@@ -40,10 +35,10 @@ router.get('/:id', (req, res) => {
             where: {
                 id: req.params.id
             },
-            attributes: ['id',
+            attributes: [
+                'id',
                 'content',
-                'title',
-                'created_at'
+                'title'
             ],
             include: [{
                     model: User,
@@ -51,7 +46,7 @@ router.get('/:id', (req, res) => {
                 },
                 {
                     model: Comment,
-                    attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+                    attributes: ['id', 'comment_text', 'post_id', 'user_id', 'date_created'],
                     include: {
                         model: User,
                         attributes: ['username']
@@ -59,15 +54,14 @@ router.get('/:id', (req, res) => {
                 }
             ]
         })
-        .then(dbPostData => {
-            if (!dbPostData) {
-                res.status(404).json({ message: 'No post found with this id' });
+        .then(postData => {
+            if (!postData) {
+                res.status(404).json({ message: 'No post found!' });
                 return;
             }
-            res.json(dbPostData);
+            res.json(postData);
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json(err);
         });
 });
@@ -78,9 +72,8 @@ router.post('/', withAuth, (req, res) => {
             content: req.body.content,
             user_id: req.session.user_id
         })
-        .then(dbPostData => res.json(dbPostData))
+        .then(postData => res.json(postData))
         .catch(err => {
-            console.log(err);
             res.status(500).json(err);
         });
 });
@@ -93,31 +86,31 @@ router.put('/:id', withAuth, (req, res) => {
             where: {
                 id: req.params.id
             }
-        }).then(dbPostData => {
-            if (!dbPostData) {
+        }).then(postData => {
+            if (!postData) {
                 res.status(404).json({ message: 'No post found with this id' });
                 return;
             }
-            res.json(dbPostData);
+            res.json(postData);
         })
         .catch(err => {
-            console.log(err);
             res.status(500).json(err);
         });
 });
+
 router.delete('/:id', withAuth, (req, res) => {
     Post.destroy({
         where: {
             id: req.params.id
         }
-    }).then(dbPostData => {
-        if (!dbPostData) {
+    }).then(postData => {
+        if (!postData) {
             res.status(404).json({ message: 'No post found with this id' });
             return;
         }
-        res.json(dbPostData);
+        res.json(postData);
     }).catch(err => {
-        console.log(err);
+
         res.status(500).json(err);
     });
 });
