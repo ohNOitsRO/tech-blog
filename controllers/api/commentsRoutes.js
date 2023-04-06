@@ -9,7 +9,6 @@ router.get('/', (req, res) => {
         
 });
 
-
 router.get('/:id', (req, res) => {
     Comment.findAll({
             where: {
@@ -19,7 +18,6 @@ router.get('/:id', (req, res) => {
         .then(commentData => res.json(commentData))
         
 });
-
 
 router.post('/', withAuth, (req, res) => {
     if (req.session) {

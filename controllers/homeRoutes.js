@@ -10,19 +10,15 @@ router.get('/', async (req, res) => {
     
     const posts = postData.map((post) => post.get({ plain: true }));
    
-    res.render('all-posts-admin', { posts, loggedIn: req.session.loggedIn});
+    res.render('login', { posts, loggedIn: req.session.loggedIn});
   
 });
 
-
-
-// get single post
 router.get('/post/:id', withAuth, async (req, res) => {
   try {
-    // what should we pass here? we need to get some data passed via the request body (something.something.id?)
-    // change the model below, but not the findByPk method. - DONE!
+    
     const postData = await Post.findOne({
-      // helping you out with the include here, no changes necessary
+      
       where: {id: req.params.id},
       include: [
         User,
@@ -34,12 +30,11 @@ router.get('/post/:id', withAuth, async (req, res) => {
     });
 
     if (postData) {
-      // serialize the data
       const post = postData.get({ plain: true });
-      // which view should we render for a single-post? - DONE!
-      console.log(post);
+      
       res.render('singlepost', { post, loggedIn: req.session.loggedIn});
-    } else {
+    } 
+    else {
       res.status(404).end();
     }
   } catch (err) {
@@ -47,7 +42,6 @@ router.get('/post/:id', withAuth, async (req, res) => {
   }
 });
 
-// giving you the login and signup route pieces below, no changes needed.
 router.get('/login', (req, res) => {
   if (req.session.loggedIn) {
     res.redirect('/dashboard');
