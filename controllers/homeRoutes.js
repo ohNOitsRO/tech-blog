@@ -4,22 +4,24 @@ const withAuth = require('../utils/auth');
 
 
 router.get('/', async (req, res) => {
-    const postData = await Post.findAll({
+    const postData = await Post.findAll(
+    {
           include: [User],
     });
     
     const posts = postData.map((post) => post.get({ plain: true }));
    
-    res.render('login', { posts, loggedIn: req.session.loggedIn});
+    res.render('homepage', { posts, loggedIn: req.session.loggedIn});
   
 });
 
+
 router.get('/post/:id', withAuth, async (req, res) => {
   try {
-    
     const postData = await Post.findOne({
-      
-      where: {id: req.params.id},
+      where: {
+          id: req.params.id
+      },
       include: [
         User,
         {
@@ -30,6 +32,7 @@ router.get('/post/:id', withAuth, async (req, res) => {
     });
 
     if (postData) {
+      
       const post = postData.get({ plain: true });
       
       res.render('singlepost', { post, loggedIn: req.session.loggedIn});
@@ -41,6 +44,7 @@ router.get('/post/:id', withAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 
 router.get('/login', (req, res) => {
   if (req.session.loggedIn) {
