@@ -41,8 +41,7 @@ router.put('/:id', withAuth, (req, res) => {
             }
     }).then(commentData => {
         if (!commentData) {
-            res.status(404).json({ message: 'No comment found!' });
-            return;
+            return res.status(404).json({ message: 'No comment found!' });
         }
         res.json(commentData);
     }).catch(err => {
@@ -58,8 +57,8 @@ router.delete('/:id', withAuth, (req, res) => {
         }
     }).then(commentData => {
         if (!commentData) {
-            res.status(404).json({ message: 'No comment found!' });
-            return;
+            return res.status(404).json({ message: 'No comment found!' });
+            
         }
         res.json(commentData);
     }).catch(err => {
