@@ -85,9 +85,9 @@ router.post('/login', async (req, res) => {
                 res.status(400).json({ message: 'User does not exist!' });
                 return;
             }
-
+            console.log(userData.toJSON());
             const validPassword = userData.checkPassword(req.body.password);
-
+            console.log(validPassword);
             if (!validPassword) {
                 res.status(400).json({ message: 'Wrong Password! Try Again!' });
                 return;
